@@ -1,17 +1,18 @@
-
 import 'package:flutter/material.dart';
+import 'package:w4_practice/2_download_app/notifier.dart';
 
 import '../../providers/theme_color_provider.dart';
 import '../../theme/theme.dart';
 import 'widget/theme_color_button.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
- 
+  const SettingsScreen({super.key, required this.notifier});
+  final Notifier notifier;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: currentThemeColor.backgroundColor,
+      color: notifier.theme.backgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -19,7 +20,7 @@ class SettingsScreen extends StatelessWidget {
           Text(
             "Settings",
             style: AppTextStyles.heading.copyWith(
-              color: currentThemeColor.color,
+              color: notifier.theme.color,
             ),
           ),
 
@@ -38,8 +39,8 @@ class SettingsScreen extends StatelessWidget {
                 .map(
                   (theme) => ThemeColorButton(
                     themeColor: theme,
-                    isSelected: theme == currentThemeColor,
-                    onTap: (value) { },
+                    isSelected: theme == notifier.theme,
+                    onTap: notifier.onThemeChange
                   ),
                 )
                 .toList(),
@@ -49,4 +50,3 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
- 

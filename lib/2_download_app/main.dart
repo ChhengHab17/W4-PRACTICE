@@ -1,50 +1,53 @@
 import 'package:flutter/material.dart';
-
-import 'ui/providers/theme_color_provider.dart';
+import 'package:w4_practice/2_download_app/notifier.dart';
 import 'ui/screens/settings/settings_screen.dart';
 import 'ui/screens/downloads/downloads_screen.dart';
 import 'ui/theme/theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  final Notifier notifier = Notifier();
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  int _currentIndex = 1;
-
-  final List<Widget> _pages =  [DownloadsScreen(), SettingsScreen()];
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: appTheme,
-      home: Scaffold(
-        body: _pages[_currentIndex],
+    return ListenableBuilder(
+      listenable: notifier,
+      builder: (ctx, _) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: appTheme,
+          home: Screens(notifier: notifier),
+        );
+      },
+    );
+  }
+}
 
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          selectedItemColor: currentThemeColor.color,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Downloads'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Settings',
-            ),
-          ],
-        ),
+class Screens extends StatelessWidget {
+  const Screens({super.key, required this.notifier});
+  final Notifier notifier;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> pages = [DownloadsScreen(notifier: notifier,), SettingsScreen(notifier: notifier,)];
+    return Scaffold(
+      body: pages[notifier.currentIndex],
+
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: notifier.currentIndex,
+        onTap: (index) {
+          notifier.changeTab(index);
+        },
+        selectedItemColor: notifier.theme.color,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Downloads'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Settings'),
+        ],
       ),
     );
   }

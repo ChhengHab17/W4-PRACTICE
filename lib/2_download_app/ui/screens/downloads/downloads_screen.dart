@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../providers/theme_color_provider.dart';
+import 'package:w4_practice/2_download_app/notifier.dart';
 import '../../theme/theme.dart';
 import 'widgets/download_controler.dart';
-
 
 class DownloadsScreen extends StatelessWidget {
   // Create the list of fake ressources
@@ -13,8 +12,8 @@ class DownloadsScreen extends StatelessWidget {
   ];
 
   final List<DownloadController> controllers = [];
-
-  DownloadsScreen({super.key}) {
+  final Notifier notifier;
+  DownloadsScreen({super.key, required this.notifier}) {
     // Create a controllers for each ressource
     for (Ressource ressource in ressources) {
       controllers.add(DownloadController(ressource));
@@ -24,7 +23,8 @@ class DownloadsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: currentThemeColor.backgroundColor,
+      color: notifier.theme.backgroundColor,
+      width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -32,7 +32,7 @@ class DownloadsScreen extends StatelessWidget {
           Text(
             "Downloads",
             style: AppTextStyles.heading.copyWith(
-              color: currentThemeColor.color,
+              color: notifier.theme.color,
             ),
           ),
 
