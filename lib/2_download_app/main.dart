@@ -15,15 +15,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: notifier,
-      builder: (ctx, _) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: appTheme,
-          home: Screens(notifier: notifier),
-        );
-      },
+    return MaterialApp(
+      home: ListenableBuilder(
+        listenable: notifier,
+        builder: (ctx, _) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: appTheme,
+            home: Screens(notifier: notifier),
+          );
+        },
+      ),
     );
   }
 }
